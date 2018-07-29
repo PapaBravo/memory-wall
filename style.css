@@ -462,7 +462,8 @@ video {
 
 .polaroid {
   position: relative;
-  width: 220px;
+  height: 95%;
+  width: 95%;
 }
  
 .polaroid img {
@@ -472,6 +473,11 @@ video {
      -moz-box-shadow: 3px 3px 3px #777;
           box-shadow: 3px 3px 3px #777;
   max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  display: block;
+  image-orientation: from-image;
 }
  
 .polaroid p {
@@ -479,6 +485,19 @@ video {
   text-align: center;
   width: 100%;
   bottom: 0px;
-  font: 400 18px/1 'Papyrus', cursive;
+  font: 400 18px;
   color: #888;
+}
+
+#image-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  justify-content: space-between;
+}
+
+#image-container > * {
+  flex-grow: 1;
+  width: 45%;
+  margin: 20px;
 }
