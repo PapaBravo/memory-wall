@@ -1,0 +1,39 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Memory Wall</title>
+
+    <meta name="description" content="Share memories on the wall">
+    <meta name="author" content="Paul Boeck">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link rel="stylesheet" href="./style.css"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700,300,400italic,700italic,300italic,600,600italic,800,800italic"/>
+    <script src="load-image.all.min.js"></script>
+</head>
+
+<body>
+
+    <div id="page-snap" class="page">
+        <h1>Memory Wall</h1>
+        <h2>Take a picture and share it!</h2>
+
+        <section>
+            <div id="select-photo">
+                <div class="file-input">
+                    <input type="file" id="input-photo" accept="image/*" />
+                    <label for="input-photo">Choose or take a photo</label>
+                </div>
+            </div>
+        </section>
+    </div>
+    <div id="page-gallery" class="page"></div>
+
+    <script src="./scripts.js"></script>
+</body>
+
+</html>

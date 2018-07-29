@@ -1,0 +1,461 @@
+html {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+  font-size: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: #c7baff;
+  color: #333;
+  height: 100%;
+  overflow: hidden;
+  text-align: center;
+}
+
+header {
+  background: #987fff;
+  height: 72px;
+  color: #333;
+}
+
+header label,
+header button {
+  font-size: 0.8em;
+  color: #fff;
+}
+
+header button {
+  border: 0;
+  background: none;
+  cursor: pointer;
+  padding: 8px 8px 4px 8px;
+  border: 2px solid transparent;
+}
+
+header button img {
+  display: block;
+  width: 28px;
+  height: 24px;
+  margin: 0 auto 5px auto;
+}
+
+header .left,
+header .right {
+  flex: 1;
+}
+
+header .left {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-box-align: start;
+  -ms-flex-align: start;
+  align-items: flex-start;
+}
+
+header .right {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+  -webkit-box-align: end;
+  -ms-flex-align: end;
+  align-items: flex-end;
+}
+
+header .centre-to-right {
+  flex: 4;
+}
+
+header .centre-to-right h3 {
+  text-align: left;
+}
+
+header .left button {
+  margin-right: 2px;
+}
+
+header .left button.btn-back {
+
+}
+
+header .right button {
+  margin-right: 10px;
+}
+
+header a {
+  color: #444;
+  text-decoration: none;
+}
+
+header h2 {
+  margin: 0;
+  color: #fff;
+  font-size: 1.3em;
+  text-align: center;
+}
+
+header h3 {
+  font-size: 1.1em;
+  font-weight: normal;
+}
+
+h1 {
+  display: inline-block;
+  font-size: 3em;
+  color: #8b74ea;
+  margin: 0 0 0.25em 0;
+  text-align: left;
+  font-weight: normal;
+  padding-left: 1.3em;
+  background: url(../images/snapwat-icon-purple.svg) left 0.25em no-repeat;
+  background-size: 1em 1em;
+}
+
+h2 {
+  font-size: 1.4em;
+  margin: 0.5em 0;
+}
+
+.toolbar {
+  display: none;
+  justify-content: space-between;
+  align-items: center;
+  height: 72px;
+}
+
+#toolbar-home {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.page {
+  display: none;
+  z-index: 1;
+  position: absolute;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  height: -webkit-calc(100% - 72px);
+  height: -moz-calc(100% - 72px);
+  height: -o-calc(100% - 72px);
+  height: -ms-calc(100% - 72px);
+  height: calc(100% - 72px);
+  top: 72px;
+  left: 0;
+  overflow: hidden;
+  background: #c7baff;
+  background: linear-gradient(#e6e0ff, #c7baff);
+}
+
+header input,
+header button {
+  outline: none;
+  line-height: 1em;
+}
+
+#input-colour-container {
+  border: 2px solid transparent;
+  padding: 8px 8px 4px 8px;
+  margin-left: 15px;
+  margin-right: 15px;
+  width: 40px;
+}
+
+#input-colour {
+  display: none;
+  width: 40px;
+  height: 24px;
+  cursor: pointer;
+}
+
+#input-colour-substitute {
+  background: #000;
+  border: 1px solid #ccc;
+  width: 35px;
+  height: 25px;
+}
+
+#input-colour-container label {
+  margin-top: 1px;
+}
+
+#input-size-container {
+  width: 60px;
+}
+
+.page a,
+.page a:hover {
+  color: #555;
+}
+
+.page button {
+  cursor: pointer;
+  border-radius: 5px;
+  border: 0;
+  background: #987fff;
+  color: #fff;
+  padding: 10px 15px;
+  font-size: 1.1em;
+}
+
+strong {
+  font-weight: bold;
+}
+
+.centre {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+
+}
+
+video {
+  position: absolute;
+  visibility: hidden;
+  display: none;
+  width: 100%;
+  height: 100%;
+}
+
+#canvas-camera {
+  z-index: -1;
+  pointer-events: none;
+  object-fit: contain;
+}
+
+#canvas-draw {
+  z-index: 1;
+  position: absolute;
+}
+
+#canvas-emoji {
+  z-index: 2;
+  position: absolute;
+}
+
+#image-save {
+  display: none;
+}
+
+.modal {
+  /* For performance improvement over display: none -> block */
+  opacity: 0;
+  pointer-events: none;
+  z-index: 10;
+  position: absolute;
+  width: 95%;
+  top: 72px;
+  left: 2.5%;
+  padding: 15px;
+  box-sizing: border-box;
+  background: #987fff;
+  color: #fff;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  overflow-y: auto;
+}
+
+.modal.show {
+  opacity: 1;
+  pointer-events: all;
+}
+
+#modal-tools,
+#modal-options {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-box-align: start;
+  -ms-flex-align: start;
+  align-items: flex-start;
+}
+
+#modal-tools button {
+  border: 2px solid transparent;
+  background: none;
+  cursor: pointer;
+  color: #fff;
+  font-size: 0.9em;
+  margin-right: 10px;
+}
+
+#modal-tools button.selected {
+  border: 2px dashed #10f9e6;
+}
+
+#modal-tools button img {
+  display: block;
+  height: 30px;
+  margin: 0 auto 5px auto;
+}
+
+#modal-options input {
+  margin-right: 10px;
+}
+
+#input-size {
+  margin-top: 11px;
+  height: 20px;
+}
+
+#modal-emoji {
+  /* For scrolling performance */
+  will-change: transform;
+  -webkit-overflow-scrolling: touch;
+  /* I would prefer not to set the height, but without this it's not scrollable in Samsung Internet */
+  height: 85%;
+  height: -webkit-calc(100% - 90px);
+  height: -moz-calc(100% - 90px);
+  height: -o-calc(100% - 90px);
+  height: -ms-calc(100% - 90px);
+  height: calc(100% - 90px);
+}
+
+#modal-emoji img {
+  padding: 4px;
+  cursor: pointer;
+  border: 0;
+}
+
+#page-home {
+  display: block;
+}
+
+#page-home,
+#page-about {
+  height: 100%;
+  top: 0;
+  padding: 4%;
+  overflow-y: auto;
+}
+
+#page-share {
+  padding: 15px;
+  overflow-y: auto;
+}
+
+#share-text {
+  display: block;
+  box-sizing: border-box;
+  width: 90%;
+  border: 0;
+  font-size: 1.3em;
+  padding: 10px;
+  margin: 0 auto;
+  border-radius: 5px;
+}
+
+#share-preview {
+  display: block;
+  max-width: 70%;
+  margin: 10px auto;
+}
+
+#share-submit {
+  display: block;
+  width: 90%;
+  margin: 10px auto;
+  padding: 5px;
+  font-size: 1.3em;
+}
+
+.prompt {
+  z-index: 11;
+  display: none;
+  position: absolute;
+  box-sizing: border-box;
+  bottom: 25px;
+  left: 5%;
+  width: 90%;
+  background: #987fff;
+  border-radius: 8px;
+  padding: 5px 8px;
+  font-size: 1.1em;
+  transition: opacity 2s ease-in-out;
+}
+
+.prompt p {
+  margin: 0;
+  text-align: center;
+}
+
+.fade-out {
+  opacity: 0;
+}
+
+#select-photo {
+  margin-top: 2em;
+}
+
+#input-photo {
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}
+
+#input-photo + label {
+  font-size: 1.3em;
+  background: #987fff;
+  color: #fff;
+  border-radius: 5px;
+  display: inline-block;
+  cursor: pointer;
+  padding: 10px 15px;
+}
+
+#input-photo:focus + label {
+  outline: 1px dotted #333;
+  outline: -webkit-focus-ring-color auto 5px;
+}
+
+#start-camera {
+  display: none;
+  margin-top: 1.5em;
+}
+
+#btn-start-camera {
+  font-size: 1.3em;
+}
+
+.display-mode-standalone {
+  display: none;
+}
+
+.footer {
+  margin-top: 2.5em;
+  font-size: 0.8em;
+}
+
+@media (display-mode: standalone), (display-mode: fullscreen) {
+  .display-mode-browser {
+    display: block;
+  }
+  .display-mode-browser {
+    display: none;
+  }
+}
