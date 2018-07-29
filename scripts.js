@@ -26,7 +26,9 @@ function onPhotoInputChange(e) {
     s3.upload({
         Key: albumKey + e.target.files[0].name,
         Body: e.target.files[0],
-        ACL: 'public-read'
+        ACL: 'public-read',
+        //'x-amz-cache-control': 'max-age=604800'
+        CacheControl: 'max-age=172800'
     }, (err, data) => {
         if (err) {
             console.error(err)
