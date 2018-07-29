@@ -460,10 +460,21 @@ video {
   }
 }
 
+#image-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  justify-content: space-between;
+  height: 100%;
+}
+
 .polaroid {
   position: relative;
-  height: 95%;
-  width: 95%;
+  flex-grow: 1;
+  width: 45%;
+  max-height: 80%;
+  margin: 20px;
+  margin-bottom: 10px;
 }
  
 .polaroid img {
@@ -487,17 +498,4 @@ video {
   bottom: 0px;
   font: 400 18px;
   color: #888;
-}
-
-#image-container {
-  display: flex;
-  flex-wrap: wrap;
-  align-content: flex-start;
-  justify-content: space-between;
-}
-
-#image-container > * {
-  flex-grow: 1;
-  width: 45%;
-  margin: 20px;
 }
