@@ -27,7 +27,7 @@ function onPhotoInputChange(e) {
         Key: albumKey + e.target.files[0].name,
         Body: e.target.files[0],
         ACL: 'public-read',
-        //'x-amz-cache-control': 'max-age=604800'
+        Metadata: { name: 'Paul' },
         CacheControl: 'max-age=172800'
     }, (err, data) => {
         if (err) {
@@ -39,7 +39,7 @@ function onPhotoInputChange(e) {
 }
 
 function showImages() {
-    s3.listObjects({ Prefix: albumKey}, function (err, data) {
+    s3.listObjects({ Prefix: albumKey }, function (err, data) {
         if (err) {
             console.error(err);
             return;
@@ -49,8 +49,8 @@ function showImages() {
         const bucketUrl = href + bucketName + '/';
         const photoHtml = data.Contents
             .filter(c => c.Size) // filter directories
-            .sort((a,b) => b.LastModified.valueOf() - a.LastModified.valueOf())
-            .slice(0,4)
+            .sort((a, b) => b.LastModified.valueOf() - a.LastModified.valueOf())
+            .slice(0, 4)
             .map(c => {
                 console.info(c)
                 const url = bucketUrl + encodeURIComponent(c.Key);
@@ -68,4 +68,4 @@ function showImages() {
 }
 
 inputPhoto.addEventListener('change', onPhotoInputChange);
-showImages();
+//showImages();
