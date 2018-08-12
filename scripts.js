@@ -1,13 +1,30 @@
-const pages = document.getElementsByClassName('page');
+// const pages = document.getElementsByClassName('page');
+
+const pages = ['snap', 'gallery'];
 
 const albumKey = 'photos/';
 const bucketName = 'memory-wall';
 
-
-pages[0].style.display = 'block';
-
 const inputPhoto = document.getElementById('input-photo');
 const imageContainer = document.getElementById('image-container');
+
+function showPage(page) {
+    pages.forEach(p => {
+        const el = document.getElementById(`page-${p}`);
+        el.style.display = p === page ? 'block' : 'none'
+    });
+}
+
+function hasCamera() {
+    return navigator.mediaDevices.enumerateDevices()
+        .then(devices => devices.some(d => d.kind === 'videoinput'))
+        .catch(err => {
+            console.errror(err);
+            return false;
+        });
+}
+
+hasCamera().then(showSnap => showPage(showSnap ? 'snap' : 'gallery'));
 
 AWS.config.update({
     region: 'eu-central-1',
@@ -16,9 +33,11 @@ AWS.config.update({
     })
 })
 
-var s3 = new AWS.S3({
+let s3 = new AWS.S3({
     apiVersion: '2006-03-01',
-    params: { Bucket: bucketName }
+    params: {
+        Bucket: bucketName
+    }
 });
 
 function onPhotoInputChange(e) {
@@ -27,7 +46,9 @@ function onPhotoInputChange(e) {
         Key: albumKey + e.target.files[0].name,
         Body: e.target.files[0],
         ACL: 'public-read',
-        Metadata: { name: 'Paul' },
+        Metadata: {
+            name: 'Paul'
+        },
         CacheControl: 'max-age=172800'
     }, (err, data) => {
         if (err) {
@@ -39,7 +60,9 @@ function onPhotoInputChange(e) {
 }
 
 function showImages() {
-    s3.listObjects({ Prefix: albumKey }, function (err, data) {
+    s3.listObjects({
+        Prefix: albumKey
+    }, function (err, data) {
         if (err) {
             console.error(err);
             return;
@@ -68,4 +91,4 @@ function showImages() {
 }
 
 inputPhoto.addEventListener('change', onPhotoInputChange);
-//showImages();
+showImages();
