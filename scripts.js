@@ -5,9 +5,6 @@ const pages = ['snap', 'gallery'];
 const albumKey = 'photos/';
 const bucketName = 'memory-wall';
 
-const inputPhoto = document.getElementById('input-photo');
-const imageContainer = document.getElementById('image-container');
-
 function showPage(page) {
     pages.forEach(p => {
         const el = document.getElementById(`page-${p}`);
@@ -85,10 +82,9 @@ function showImages() {
             `
             })
             .join('');
-        pages[1].style.display = 'block';
-        imageContainer.innerHTML = photoHtml;
+        document.getElementById('image-container').innerHTML = photoHtml;
     })
 }
 
-inputPhoto.addEventListener('change', onPhotoInputChange);
+document.getElementById('input-photo').addEventListener('change', onPhotoInputChange);
 showImages();
