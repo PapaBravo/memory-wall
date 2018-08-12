@@ -5,6 +5,10 @@ const pages = ['snap', 'gallery'];
 const albumKey = 'photos/';
 const bucketName = 'memory-wall';
 
+/**
+ * Displays the indicated page and hides all other pages.
+ * @param {'snap'|'gallery'} page 
+ */
 function showPage(page) {
     pages.forEach(p => {
         const el = document.getElementById(`page-${p}`);
@@ -12,6 +16,10 @@ function showPage(page) {
     });
 }
 
+/**
+ * Checks if the device has a camera.
+ * @returns {Promise<boolean>}
+ */
 function hasCamera() {
     return navigator.mediaDevices.enumerateDevices()
         .then(devices => devices.some(d => d.kind === 'videoinput'))
@@ -37,8 +45,11 @@ let s3 = new AWS.S3({
     }
 });
 
+/**
+ * Upload file from input event.
+ * @param {Event} e 
+ */
 function onPhotoInputChange(e) {
-
     s3.upload({
         Key: albumKey + e.target.files[0].name,
         Body: e.target.files[0],
@@ -56,6 +67,9 @@ function onPhotoInputChange(e) {
     });
 }
 
+/**
+ * Adds the last 4 images from S3 to the photo container
+ */
 function showImages() {
     s3.listObjects({
         Prefix: albumKey
