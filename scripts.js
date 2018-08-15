@@ -21,14 +21,13 @@ function showPage(page) {
 function initPage(page) {
     if (page === 'snap') {
         initSnapPage();
-    }    
+    }
 }
 
 function initSnapPage() {
     if (!isNameSet()) {
-        
-        let name = prompt("What's your name?");
-        console.info('Setting name now to ' + name);
+        const name = window.prompt("What's your name?");
+        localStorage.setItem(STORAGE_NAME_KEY, name);
     }
 }
 
@@ -67,11 +66,11 @@ let s3 = new AWS.S3({
  */
 function onPhotoInputChange(e) {
     s3.upload({
-        Key: albumKey + e.target.files[0].name,
+        Key: `${albumKey}${new Date().valueOf()}.jpg`,
         Body: e.target.files[0],
         ACL: 'public-read',
         Metadata: {
-            name: 'Paul'
+            name: localStorage.getItem(STORAGE_NAME_KEY) || 'unknown'
         },
         CacheControl: 'max-age=172800'
     }, (err, data) => {
