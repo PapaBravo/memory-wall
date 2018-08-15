@@ -1,5 +1,6 @@
 // const pages = document.getElementsByClassName('page');
 
+const STORAGE_NAME_KEY = 'mw-name';
 const pages = ['snap', 'gallery'];
 
 const albumKey = 'photos/';
@@ -13,7 +14,21 @@ function showPage(page) {
     pages.forEach(p => {
         const el = document.getElementById(`page-${p}`);
         el.style.display = p === page ? 'block' : 'none'
+        initPage(p);
     });
+}
+
+function initPage(page) {
+    if (page === 'snap') {
+        initSnapPage();
+    }
+}
+
+function initSnapPage() {
+    if (!isNameSet()) {
+        const name = window.prompt("What's your name?");
+        localStorage.setItem(STORAGE_NAME_KEY, name);
+    }
 }
 
 /**
@@ -51,11 +66,11 @@ let s3 = new AWS.S3({
  */
 function onPhotoInputChange(e) {
     s3.upload({
-        Key: albumKey + e.target.files[0].name,
+        Key: `${albumKey}${new Date().valueOf()}.jpg`,
         Body: e.target.files[0],
         ACL: 'public-read',
         Metadata: {
-            name: 'Paul'
+            name: localStorage.getItem(STORAGE_NAME_KEY) || 'unknown'
         },
         CacheControl: 'max-age=172800'
     }, (err, data) => {
@@ -98,6 +113,10 @@ function showImages() {
             .join('');
         document.getElementById('image-container').innerHTML = photoHtml;
     })
+}
+
+function isNameSet() {
+    return !!localStorage.getItem(STORAGE_NAME_KEY);
 }
 
 document.getElementById('input-photo').addEventListener('change', onPhotoInputChange);
