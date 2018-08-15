@@ -1,5 +1,6 @@
 // const pages = document.getElementsByClassName('page');
 
+const STORAGE_NAME_KEY = 'mw-name';
 const pages = ['snap', 'gallery'];
 
 const albumKey = 'photos/';
@@ -13,7 +14,22 @@ function showPage(page) {
     pages.forEach(p => {
         const el = document.getElementById(`page-${p}`);
         el.style.display = p === page ? 'block' : 'none'
+        initPage(p);
     });
+}
+
+function initPage(page) {
+    if (page === 'snap') {
+        initSnapPage();
+    }    
+}
+
+function initSnapPage() {
+    if (!isNameSet()) {
+        
+        let name = prompt("What's your name?");
+        console.info('Setting name now to ' + name);
+    }
 }
 
 /**
@@ -98,6 +114,10 @@ function showImages() {
             .join('');
         document.getElementById('image-container').innerHTML = photoHtml;
     })
+}
+
+function isNameSet() {
+    return !!localStorage.getItem(STORAGE_NAME_KEY);
 }
 
 document.getElementById('input-photo').addEventListener('change', onPhotoInputChange);
