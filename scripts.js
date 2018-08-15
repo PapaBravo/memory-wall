@@ -70,7 +70,7 @@ function onPhotoInputChange(e) {
         Body: e.target.files[0],
         ACL: 'public-read',
         Metadata: {
-            name: localStorage.getItem(STORAGE_NAME_KEY) || 'unknown'
+            poster: localStorage.getItem(STORAGE_NAME_KEY) || 'unknown'
         },
         CacheControl: 'max-age=172800'
     }, (err, data) => {
@@ -82,12 +82,23 @@ function onPhotoInputChange(e) {
     });
 }
 
+function getOwner(key) {
+    return new Promise((resolve, reject) => s3.headObject({
+        Key: key
+    }, function (err, data) {
+        //console.info(key, data, this.httpResponse.headers);
+        if (err) reject(err);
+        else resolve(data.Metadata.name);
+    }));
+}
+
 /**
  * Adds the last 4 images from S3 to the photo container
  */
 function showImages() {
     s3.listObjects({
-        Prefix: albumKey
+        Prefix: albumKey,
+        MaxKeys: 5
     }, function (err, data) {
         if (err) {
             console.error(err);
@@ -101,7 +112,8 @@ function showImages() {
             .sort((a, b) => b.LastModified.valueOf() - a.LastModified.valueOf())
             .slice(0, 4)
             .map(c => {
-                console.info(c)
+                //console.info(c)
+                getOwner(c.Key).then(console.info.bind(console));
                 const url = bucketUrl + encodeURIComponent(c.Key);
                 return `
                 <div class="polaroid">
