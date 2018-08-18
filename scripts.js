@@ -70,7 +70,7 @@ function onPhotoInputChange(e) {
         Body: e.target.files[0],
         ACL: 'public-read',
         Metadata: {
-            name: localStorage.getItem(STORAGE_NAME_KEY) || 'unknown'
+            poster: localStorage.getItem(STORAGE_NAME_KEY) || 'unknown'
         },
         CacheControl: 'max-age=172800'
     }, (err, data) => {
@@ -80,6 +80,31 @@ function onPhotoInputChange(e) {
             console.info('Successfully uploaded photo.');
         }
     });
+}
+
+function getOwner(key) {
+    return new Promise((resolve, reject) => s3.headObject({
+        Key: key
+    }, function (err, data) {
+        if (err) reject(err);
+        else resolve(data.Metadata.poster);
+    }));
+}
+
+/**
+ * @returns {Promise<String>}
+ */
+function getPhotoHtml(contents, bucketUrl) {
+    const url = bucketUrl + encodeURIComponent(contents.Key);
+    return getOwner(contents.Key)
+        .then(owner => {
+            return `
+            <div class="polaroid">
+                <p>${owner || 'unknown'}, ${contents.LastModified}</p>
+                <img src="${url}" />
+            </div>
+        `
+        });
 }
 
 /**
@@ -96,22 +121,16 @@ function showImages() {
         // `this` references the AWS.Response instance that represents the response
         const href = this.request.httpRequest.endpoint.href;
         const bucketUrl = href + bucketName + '/';
-        const photoHtml = data.Contents
-            .filter(c => c.Size) // filter directories
-            .sort((a, b) => b.LastModified.valueOf() - a.LastModified.valueOf())
-            .slice(0, 4)
-            .map(c => {
-                console.info(c)
-                const url = bucketUrl + encodeURIComponent(c.Key);
-                return `
-                <div class="polaroid">
-                    <p>Sarah, ${c.LastModified}</p>
-                    <img src="${url}" />
-                </div>
-            `
-            })
-            .join('');
-        document.getElementById('image-container').innerHTML = photoHtml;
+
+        Promise.all(
+            data.Contents
+                .filter(c => c.Size) // filter directories
+                .sort((a, b) => b.LastModified.valueOf() - a.LastModified.valueOf())
+                .slice(0, 4)
+                .map(c => getPhotoHtml(c, bucketUrl))
+        )
+            .then(htmls => htmls.join(''))
+            .then(html => document.getElementById('image-container').innerHTML = html);
     })
 }
 
