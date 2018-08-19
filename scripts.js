@@ -99,12 +99,19 @@ function getPhotoHtml(contents, bucketUrl) {
     return getOwner(contents.Key)
         .then(owner => {
             return `
-            <div class="polaroid">
-                <p>${owner || 'unknown'}, ${contents.LastModified}</p>
-                <img src="${url}" />
+            <div class="col-md">
+                <div class="polaroid">
+                    <img src="${url}" class="img-fluid"/>
+                    <p>${owner || 'unknown'}, ${contents.LastModified}</p>
+                </div>
             </div>
         `
         });
+}
+
+function addRowBreak(htmls) {
+    htmls.splice(3, 0, '<div class="w-100"></div>');
+    return htmls;
 }
 
 /**
@@ -126,9 +133,10 @@ function showImages() {
             data.Contents
                 .filter(c => c.Size) // filter directories
                 .sort((a, b) => b.LastModified.valueOf() - a.LastModified.valueOf())
-                .slice(0, 4)
+                .slice(0, 6)
                 .map(c => getPhotoHtml(c, bucketUrl))
         )
+            .then(addRowBreak)
             .then(htmls => htmls.join(''))
             .then(html => document.getElementById('image-container').innerHTML = html);
     })

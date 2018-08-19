@@ -9,10 +9,13 @@
     <meta name="description" content="Share memories on the wall">
     <meta name="author" content="Paul Boeck">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 
-    <link rel="stylesheet" href="./style.css"/>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700,300,400italic,700italic,300italic,600,600italic,800,800italic"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="./style.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700,300,400italic,700italic,300italic,600,600italic,800,800italic"
+    />
     <script src="https://sdk.amazonaws.com/js/aws-sdk-2.282.1.min.js"></script>
 </head>
 
@@ -31,11 +34,13 @@
             </div>
         </section>
     </div>
-    <div id="page-gallery" class="page">
-        <div id="image-container"></div>
-    </div>
+    <div id="page-gallery container" class="page">
+        <h1>Memory Wall Tori &amp; Paul</h1>
+        <p>Upload your picture @http://this.is.the.url</p>
+        <p>Du kannst dein Bild unter @http://this.is.the.url hochladen</p>
+        <div id="image-container" class="row"></div>
 
-    <script src="./scripts.js"></script>
+        <script src="./scripts.js"></script>
 </body>
 
 </html>
