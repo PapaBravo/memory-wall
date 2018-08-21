@@ -1,17 +1,20 @@
-// const pages = document.getElementsByClassName('page');
+// const PAGES = document.getElementsByClassName('page');
 
 const STORAGE_NAME_KEY = 'mw-name';
-const pages = ['snap', 'gallery'];
+const PAGES = ['snap', 'gallery'];
+const UPDATE_INTERVAL = 1000*60*5; // 5 minutes
 
-const albumKey = 'photos/';
-const bucketName = 'memory-wall';
+const ALBUM_KEY = 'photos/';
+const BUCKET_NAME = 'memory-wall';
+
+let updateHandle;
 
 /**
- * Displays the indicated page and hides all other pages.
+ * Displays the indicated page and hides all other PAGES.
  * @param {'snap'|'gallery'} page 
  */
 function showPage(page) {
-    pages.forEach(p => {
+    PAGES.forEach(p => {
         const el = document.getElementById(`page-${p}`);
         el.style.display = p === page ? 'block' : 'none'
         initPage(p);
@@ -19,8 +22,11 @@ function showPage(page) {
 }
 
 function initPage(page) {
+    clearInterval(updateHandle);
     if (page === 'snap') {
         initSnapPage();
+    } else if (page === 'gallery') {
+        initGalleryPage();
     }
 }
 
@@ -29,6 +35,11 @@ function initSnapPage() {
         const name = window.prompt("What's your name?");
         localStorage.setItem(STORAGE_NAME_KEY, name);
     }
+}
+
+function initGalleryPage() {
+    showImages();
+    updateHandle = setInterval(showImages, UPDATE_INTERVAL);
 }
 
 /**
@@ -56,7 +67,7 @@ AWS.config.update({
 let s3 = new AWS.S3({
     apiVersion: '2006-03-01',
     params: {
-        Bucket: bucketName
+        Bucket: BUCKET_NAME
     }
 });
 
@@ -66,7 +77,7 @@ let s3 = new AWS.S3({
  */
 function onPhotoInputChange(e) {
     s3.upload({
-        Key: `${albumKey}${new Date().valueOf()}.jpg`,
+        Key: `${ALBUM_KEY}${new Date().valueOf()}.jpg`,
         Body: e.target.files[0],
         ACL: 'public-read',
         Metadata: {
@@ -119,7 +130,7 @@ function addRowBreak(htmls) {
  */
 function showImages() {
     s3.listObjects({
-        Prefix: albumKey
+        Prefix: ALBUM_KEY
     }, function (err, data) {
         if (err) {
             console.error(err);
@@ -127,7 +138,7 @@ function showImages() {
         }
         // `this` references the AWS.Response instance that represents the response
         const href = this.request.httpRequest.endpoint.href;
-        const bucketUrl = href + bucketName + '/';
+        const bucketUrl = href + BUCKET_NAME + '/';
 
         Promise.all(
             data.Contents
@@ -147,4 +158,3 @@ function isNameSet() {
 }
 
 document.getElementById('input-photo').addEventListener('change', onPhotoInputChange);
-showImages();
