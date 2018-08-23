@@ -18,24 +18,26 @@
     />
     <script src="https://sdk.amazonaws.com/js/aws-sdk-2.282.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-load-image/2.19.0/load-image.all.min.js" async></script>
-    
+
 </head>
 
 <body>
-
-    <div id="page-snap" class="page">
+    <div id="page-snap" class="page container">
         <h1>Memory Wall</h1>
         <h2>Take a picture and share it!</h2>
-
         <section>
             <div id="select-photo">
                 <div class="file-input">
-                    <input type="file" id="input-photo" accept="image/*" />
+                    <input type="file" id="input-photo" accept="image/*"/>
                     <label for="input-photo">Choose or take a photo</label>
                 </div>
             </div>
         </section>
         <button onclick="showPage('gallery')">Go to gallery</button>
+        <section id="alerts" class="mt-3">
+            <div class="alert alert-success" id="alert-success">Upload successful.</div>
+            <div class="alert alert-danger" id="alert-error"> Upload failed.</div>
+        </section>
     </div>
     <div id="page-gallery" class="page container">
         <h1>Memory Wall Tori &amp; Paul</h1>
