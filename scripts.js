@@ -9,6 +9,7 @@ const ALBUM_KEY = 'photos/';
 const BUCKET_NAME = 'memory-wall';
 
 let updateHandle;
+let hasCamera;
 
 /**
  * Displays the indicated page and hides all other PAGES.
@@ -45,22 +46,40 @@ function initSnapPage() {
 function initGalleryPage() {
     showImages();
     updateHandle = setInterval(showImages, UPDATE_INTERVAL);
+    document.getElementById('btnBack').style.display = hasCamera ? 'block' : 'none';
+}
+
+function pad(n) {
+    let s = String(n);
+    return s.length === 1 ? '0' + s : s;
+}
+
+function formatDate(date) {
+    return `${pad(date.getHours())}:${pad(date.getMinutes())} ${pad(date.getDate())}.${pad(date.getMonth())}.${date.getFullYear()}`;
 }
 
 /**
  * Checks if the device has a camera.
  * @returns {Promise<boolean>}
  */
-function hasCamera() {
+function checkCamera() {
+    if (typeof hasCamera !== 'undefined') {
+        return Promise.resolve(hasCamera);
+    }
     return navigator.mediaDevices.enumerateDevices()
         .then(devices => devices.some(d => d.kind === 'videoinput'))
+        .then(c => {
+            hasCamera = c;
+            return c;
+        })
         .catch(err => {
             console.errror(err);
+            hasCamera = false;
             return false;
         });
 }
 
-hasCamera().then(showSnap => showPage(showSnap ? 'snap' : 'gallery'));
+checkCamera().then(showSnap => showPage(showSnap ? 'snap' : 'gallery'));
 
 AWS.config.update({
     region: 'eu-central-1',
@@ -134,7 +153,7 @@ async function getPhotoHtml(contents, bucketUrl) {
     const node = createElement('div', 'col-md');
     node.appendChild(createElement('div', 'polaroid'));
     node.children[0].appendChild(image);
-    node.children[0].appendChild(createElement('p', null, `${owner || 'unknown'}, ${contents.LastModified}`));
+    node.children[0].appendChild(createElement('p', null, `${owner || 'unknown'}, ${formatDate(contents.LastModified)}`));
     return node;
 }
 
@@ -173,7 +192,6 @@ function showImages() {
                 while (container.hasChildNodes()) {
                     container.removeChild(container.lastChild);
                 }
-                console.info(container.childNodes);
                 nodes.forEach(n => container.appendChild(n));
             });
     })
@@ -191,4 +209,6 @@ function alertUser(type) {
     }
 }
 
-document.getElementById('input-photo').addEventListener('change', onPhotoInputChange);
+function back() {
+    showPage('snap');
+}

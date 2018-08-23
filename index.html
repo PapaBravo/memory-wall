@@ -28,7 +28,7 @@
         <section>
             <div id="select-photo">
                 <div class="file-input">
-                    <input type="file" id="input-photo" accept="image/*"/>
+                    <input type="file" id="input-photo" accept="image/*" onchange="onPhotoInputChange(event)"/>
                     <label for="input-photo">Choose or take a photo</label>
                 </div>
             </div>
@@ -41,8 +41,9 @@
     </div>
     <div id="page-gallery" class="page container">
         <h1>Memory Wall Tori &amp; Paul</h1>
-        <p>Upload your picture @http://this.is.the.url</p>
-        <p>Du kannst dein Bild unter @http://this.is.the.url hochladen</p>
+        <p>Upload your picture at <a href="https://papabravo.github.io/memory-wall/">https://papabravo.github.io/memory-wall/</a>.</p>
+        <p>Du kannst dein Bild unter <a href="https://papabravo.github.io/memory-wall/">https://papabravo.github.io/memory-wall/</a> hochladen.</p>
+        <button id="btnBack" class="button" onclick="back()">Back</button>
         <div id="image-container" class="row"></div>
 
         <script src="./scripts.js"></script>
