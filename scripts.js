@@ -3,6 +3,7 @@
 const STORAGE_NAME_KEY = 'mw-name';
 const PAGES = ['snap', 'gallery'];
 const UPDATE_INTERVAL = 1000 * 60 * 5; // 5 minutes
+const ALERT_FADE_INTERVAL = 1000 * 3; // 3 seconds
 
 const ALBUM_KEY = 'photos/';
 const BUCKET_NAME = 'memory-wall';
@@ -91,8 +92,10 @@ function onPhotoInputChange(e) {
         CacheControl: 'max-age=172800'
     }, (err, data) => {
         if (err) {
-            console.error(err)
+            console.error(err);
+            alertUser('error');
         } else {
+            alertUser('success');
             console.info('Successfully uploaded photo.');
         }
     });
@@ -178,6 +181,14 @@ function showImages() {
 
 function isNameSet() {
     return !!localStorage.getItem(STORAGE_NAME_KEY);
+}
+
+function alertUser(type) {
+    const el = document.getElementById(`alert-${type}`);
+    if (el) {
+        el.style.display = 'block';
+        setTimeout(() => el.removeAttribute('style'), ALERT_FADE_INTERVAL);
+    }
 }
 
 document.getElementById('input-photo').addEventListener('change', onPhotoInputChange);
