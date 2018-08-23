@@ -49,6 +49,15 @@ function initGalleryPage() {
     document.getElementById('btnBack').style.display = hasCamera ? 'block' : 'none';
 }
 
+function pad(n) {
+    let s = String(n);
+    return s.length === 1 ? '0' + s : s;
+}
+
+function formatDate(date) {
+    return `${pad(date.getHours())}:${pad(date.getMinutes())} ${pad(date.getDate())}.${pad(date.getMonth())}.${date.getFullYear()}`;
+}
+
 /**
  * Checks if the device has a camera.
  * @returns {Promise<boolean>}
@@ -144,7 +153,7 @@ async function getPhotoHtml(contents, bucketUrl) {
     const node = createElement('div', 'col-md');
     node.appendChild(createElement('div', 'polaroid'));
     node.children[0].appendChild(image);
-    node.children[0].appendChild(createElement('p', null, `${owner || 'unknown'}, ${contents.LastModified}`));
+    node.children[0].appendChild(createElement('p', null, `${owner || 'unknown'}, ${formatDate(contents.LastModified)}`));
     return node;
 }
 
