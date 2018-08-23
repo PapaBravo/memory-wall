@@ -2,7 +2,7 @@
 
 const STORAGE_NAME_KEY = 'mw-name';
 const PAGES = ['snap', 'gallery'];
-const UPDATE_INTERVAL = 1000*60*5; // 5 minutes
+const UPDATE_INTERVAL = 1000 * 60 * 5; // 5 minutes
 
 const ALBUM_KEY = 'photos/';
 const BUCKET_NAME = 'memory-wall';
@@ -16,8 +16,12 @@ let updateHandle;
 function showPage(page) {
     PAGES.forEach(p => {
         const el = document.getElementById(`page-${p}`);
-        el.style.display = p === page ? 'block' : 'none'
-        initPage(p);
+        if (p === page) {
+            el.style.display = 'block';
+            initPage(p);
+        } else {
+            el.style.display = 'none';
+        }
     });
 }
 
@@ -80,6 +84,7 @@ function onPhotoInputChange(e) {
         Key: `${ALBUM_KEY}${new Date().valueOf()}.jpg`,
         Body: e.target.files[0],
         ACL: 'public-read',
+        ContentType: 'image/jpeg',
         Metadata: {
             poster: localStorage.getItem(STORAGE_NAME_KEY) || 'unknown'
         },
@@ -102,27 +107,39 @@ function getOwner(key) {
     }));
 }
 
+function getImageHtml(url) {
+    return new Promise((resolve, reject) => {
+        loadImage(url, resolve, { orientation: true });
+    })
+}
+
+function createElement(tag, clazz, textContent) {
+    const node = document.createElement(tag);
+    if (clazz) node.setAttribute('class', clazz);
+    if (textContent) node.textContent = textContent;
+    return node;
+}
+
 /**
  * @returns {Promise<String>}
  */
-function getPhotoHtml(contents, bucketUrl) {
+async function getPhotoHtml(contents, bucketUrl) {
     const url = bucketUrl + encodeURIComponent(contents.Key);
-    return getOwner(contents.Key)
-        .then(owner => {
-            return `
-            <div class="col-md">
-                <div class="polaroid">
-                    <img src="${url}" class="img-fluid"/>
-                    <p>${owner || 'unknown'}, ${contents.LastModified}</p>
-                </div>
-            </div>
-        `
-        });
+    const owner = await getOwner(contents.Key);
+    const image = await getImageHtml(url);
+
+    const node = createElement('div', 'col-md');
+    node.appendChild(createElement('div', 'polaroid'));
+    node.children[0].appendChild(image);
+    node.children[0].appendChild(createElement('p', null, `${owner || 'unknown'}, ${contents.LastModified}`));
+    return node;
 }
 
-function addRowBreak(htmls) {
-    htmls.splice(3, 0, '<div class="w-100"></div>');
-    return htmls;
+function addRowBreak(nodes) {
+    const breakNode = document.createElement('div');
+    breakNode.setAttribute('class', 'w-100');
+    nodes.splice(3, 0, breakNode);
+    return nodes;
 }
 
 /**
@@ -148,8 +165,11 @@ function showImages() {
                 .map(c => getPhotoHtml(c, bucketUrl))
         )
             .then(addRowBreak)
-            .then(htmls => htmls.join(''))
-            .then(html => document.getElementById('image-container').innerHTML = html);
+            .then(nodes => {
+                const container = document.getElementById('image-container');
+                container.childNodes.forEach(n => container.removeChild(n));
+                nodes.forEach(n => container.appendChild(n));
+            });
     })
 }
 

@@ -17,7 +17,7 @@ div.polaroid {
   background-color: #fffaf0;
 }
  
-.polaroid img {
+.polaroid img, .polaroid canvas {
   border: 10px solid #fffaf0;
 
   max-width: 100%;
