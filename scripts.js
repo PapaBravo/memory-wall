@@ -2,7 +2,7 @@
 
 const STORAGE_NAME_KEY = 'mw-name';
 const PAGES = ['snap', 'gallery'];
-const UPDATE_INTERVAL = 1000 * 60 * 5; // 5 minutes
+const UPDATE_INTERVAL = 1000 * 60; // 1 minute
 const ALERT_FADE_INTERVAL = 1000 * 3; // 3 seconds
 
 const ALBUM_KEY = 'photos/';
