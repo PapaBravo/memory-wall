@@ -167,7 +167,10 @@ function showImages() {
             .then(addRowBreak)
             .then(nodes => {
                 const container = document.getElementById('image-container');
-                container.childNodes.forEach(n => container.removeChild(n));
+                while (container.hasChildNodes()) {
+                    container.removeChild(container.lastChild);
+                }
+                console.info(container.childNodes);
                 nodes.forEach(n => container.appendChild(n));
             });
     })
