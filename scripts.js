@@ -27,6 +27,11 @@ function showPage(page) {
     });
 }
 
+function setLoading(isLoading) {
+    const el = document.getElementById('loader');
+    el.style.display = isLoading ? 'block' : 'none';
+}
+
 function initPage(page) {
     clearInterval(updateHandle);
     if (page === 'snap') {
@@ -131,7 +136,7 @@ function getOwner(key) {
 
 function getImageHtml(url) {
     return new Promise((resolve, reject) => {
-        loadImage(url, resolve, { orientation: true });
+        loadImage(url, resolve, { orientation: true, maxWidth: 600, maxHeight: 600 });
     })
 }
 
@@ -168,6 +173,7 @@ function addRowBreak(nodes) {
  * Adds the last 4 images from S3 to the photo container
  */
 function showImages() {
+    setLoading(true);
     s3.listObjects({
         Prefix: ALBUM_KEY
     }, function (err, data) {
@@ -188,6 +194,7 @@ function showImages() {
         )
             .then(addRowBreak)
             .then(nodes => {
+                setLoading(false);
                 const container = document.getElementById('image-container');
                 while (container.hasChildNodes()) {
                     container.removeChild(container.lastChild);
