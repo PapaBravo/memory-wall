@@ -136,7 +136,7 @@ function getOwner(key) {
 
 function getImageHtml(url) {
     return new Promise((resolve, reject) => {
-        loadImage(url, resolve, { orientation: true, maxWidth: 600, maxHeight: 600 });
+        loadImage(url, resolve, { orientation: true, maxWidth: 800, maxHeight: 800 });
     })
 }
 
