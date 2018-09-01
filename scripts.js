@@ -60,7 +60,7 @@ function pad(n) {
 }
 
 function formatDate(date) {
-    return `${pad(date.getHours())}:${pad(date.getMinutes())} ${pad(date.getDate())}.${pad(date.getMonth())}.${date.getFullYear()}`;
+    return `${pad(date.getHours())}:${pad(date.getMinutes())} ${pad(date.getDate())}.${pad(date.getMonth()+1)}.${date.getFullYear()}`;
 }
 
 /**
